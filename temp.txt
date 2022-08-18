@@ -1,0 +1,14 @@
+Cookie md5 admin true
+df2eb4ba34ed059a1e3e89ff4dfc13445f104a1a52295214def1c4fb1693a5c3
+
+http://10.13.199.248/?page=survey change vote value to 99999
+03a944b434d5baff05f46c4bede5792551a2595574bcafc9a6e25f67c382ccaa
+
+http://10.13.199.248/index.php?page=recover inspect element change reset email to own
+1d4855f7337c0c14b6f44946872c4eb33853f40b2d54393fbe94f49f1e19bbb0
+
+
+Xss on feedback page, /><script>alert(1);</script>
+0fbb54bbf7d099713ca4be297e1bc7da0173d8b3c21c1811b916a3a86652724e
+
+
