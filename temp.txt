@@ -12,3 +12,8 @@ Xss on feedback page, /><script>alert(1);</script>
 0fbb54bbf7d099713ca4be297e1bc7da0173d8b3c21c1811b916a3a86652724e
 
 
+dirbuster {ip}/whatever/ directory
+http://10.12.179.218/whatever/ has "htpasswd" file
+username root, password is md5 encrypted and decrypts to "dragon"
+login on {ip}/admin
+d19b4823e0d5600ceed56d5e896ef328d7a2b9e7ac7e80f4fcdb9b10bcb3e7ff
