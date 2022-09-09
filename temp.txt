@@ -7,6 +7,7 @@ http://10.13.199.248/?page=survey change vote value to 99999
 
 Flag: 03a944b434d5baff05f46c4bede5792551a2595574bcafc9a6e25f67c382ccaa
 ---
+
 http://10.13.199.248/index.php?page=recover inspect element change reset email to own
 
 Flag: 1d4855f7337c0c14b6f44946872c4eb33853f40b2d54393fbe94f49f1e19bbb0
@@ -19,13 +20,15 @@ Flag: 0fbb54bbf7d099713ca4be297e1bc7da0173d8b3c21c1811b916a3a86652724e
 
 dirbuster {ip}/whatever/ directory
 http://10.12.179.218/admin/ directory found
-http://10.12.179.218/whatever/ has "htpasswd" file
+http://10.12.179.218/whatever/ has "htpasswd" file 
+htpasswd file contents: "root:8621ffdbc5698829397d97767ac13db3"
 username root, password is md5 encrypted and decrypts to "dragon"
 login on {ip}/admin
 
 Flag: d19b4823e0d5600ceed56d5e896ef328d7a2b9e7ac7e80f4fcdb9b10bcb3e7ff
 ---
 
+request header spoofing
 click "© BornToSec" at the bottom of the page, it opens a page with an albatross with a hash in the url, it decrypts to "TAMERE".
 inspect element to see comments with hints
 "You must cumming from : "https://www.nsa.gov/" to go to the next step"
@@ -34,3 +37,5 @@ curl --referer https://www.nsa.gov/ http://10.12.179.218/\?page\=e43ad1fdc54babe
 
 Flag: f2a29020ef3132e01dd61df97fd33ec8d7fcd1388cc9601e7db691d17d4d6188
 ---
+
+robots.txt
