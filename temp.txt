@@ -17,15 +17,24 @@ Xss on feedback page, /><script>alert(1);</script>
 
 Flag: 0fbb54bbf7d099713ca4be297e1bc7da0173d8b3c21c1811b916a3a86652724e
 ---
+robots.txt
+The file robots.txt is often used on webpages to tell web crawlers how they should access or disallow them from parts of the website,
+for example to hide irrelevant results from Google search or prevent the server from overloading from crawlers loading content.
+
+http://{ip}/robots.txt shows there are /whatever and /.hidden directories on the website
 
 dirbuster {ip}/whatever/ directory
-http://10.12.179.218/admin/ directory found
 http://10.12.179.218/whatever/ has "htpasswd" file 
 htpasswd file contents: "root:8621ffdbc5698829397d97767ac13db3"
 username root, password is md5 encrypted and decrypts to "dragon"
+password doesn't work on the login but trying out subdirectories we find {ip}/admin
 login on {ip}/admin
 
 Flag: d19b4823e0d5600ceed56d5e896ef328d7a2b9e7ac7e80f4fcdb9b10bcb3e7ff
+---
+robots.txt 2
+/whatever subdirectory
+
 ---
 
 request header spoofing
@@ -37,5 +46,3 @@ curl --referer https://www.nsa.gov/ http://10.12.179.218/\?page\=e43ad1fdc54babe
 
 Flag: f2a29020ef3132e01dd61df97fd33ec8d7fcd1388cc9601e7db691d17d4d6188
 ---
-
-robots.txt
