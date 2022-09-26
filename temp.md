@@ -44,6 +44,7 @@ Flag: d19b4823e0d5600ceed56d5e896ef328d7a2b9e7ac7e80f4fcdb9b10bcb3e7ff
 robots.txt 2
 /whatever subdirectory
 
+Flag: 99dde1d35d1fdd283924d84e6d9f1d820
 ---
 
 request header spoofing
@@ -191,3 +192,5 @@ admin
 Sign in with root:shadow or admin:shadow from link on main page or {ip}/?page=signin
 
 Flag: b3a6e43ddf8b4bbb4125e5e7d23040433827759d4de1c04ea63907479a80a6b2
+
+---

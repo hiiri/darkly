@@ -1,42 +1,72 @@
-from bs4 import BeautifulSoup
 import requests
+import re
 
-url = 'http://10.12.179.218'
-r = requests.get(url + '/.hidden/')
-# r = requests.get(url + '/.hidden/amcbevgondgcrloowluziypjdh/acbnunauucfplzmaglkvqgswwn/ayuprpftypqspruffmkuucjccv/README')
-print(r.status_code)
-print(r.text)
+r = requests.get('http://10.12.179.218/.hidden/')
 
-soup = BeautifulSoup(r.content) # If this line causes an error, run 'pip install html5lib' or install html5lib
-links = soup.select('a')
-
-# Print out the result
+used = dict()
+usedresp = dict()
 def get_links(url):
-	# r = requests.get(url + '/.hidden/amcbevgondgcrloowluziypjdh/acbnunauucfplzmaglkvqgswwn/ayuprpftypqspruffmkuucjccv/README')
-	# print(r.status_code)
-	# print(r.text)
-
-	 # If this line causes an error, run 'pip install html5lib' or install html5lib
+	# if not (url.startswith('http')):
+	# 	return
+	r = requests.get(url)
+	links = re.findall(r'(?<=a href=").*?(?=")', str(r.text))
+	if links:
+		links[0] = url
 	
 	
-	asd = []
+	# print(links)
 	for link in links:
-		r = requests.get(url + '/.hidden/' + link)
-		soup = BeautifulSoup(r.content)
-		links = soup.select('a')
-		if (link.get_text() == 'README'):
-			print("reademe")
-		# print(link.get_text())
-		asd.append(link.get_text())
-	return asd
-res = get_links(url)
-# print(res)
+		# readmelink = 'http://10.12.179.218/.hidden/' + link
+		readmelink = url + link
+		if not link.endswith('README'):
+			readmelink += 'README'
+		if readmelink.count('.hidden') == 2:
+			readmelink = readmelink[29:]
+		# print(readmelink)
+		if (readmelink not in used and readmelink.startswith('http')):
+			r = requests.get(readmelink)
+		else:
+			continue
+		# print(link, url)
+		# print('http://10.12.179.218/.hidden/' + link  + 'README')
+		# print(readmelink)
+		used.update({readmelink: True})
 
-for link in res[1:]:
-	print(link)
-	ress = get_links(url + '/.hidden/' + link)
-	print(url + '/.hidden/' + link)
-	# print('-------')
-	# print(ress)
-	# print('-------')
-	
+		if (r.content not in usedresp):
+			usedresp.update({r.content: True})
+			print((r.content))
+			print(readmelink)
+			
+		# print('http://10.12.179.218/.hidden/' + link  + 'README')
+
+		get_links(url + link)
+	return links
+
+all_links = []
+links = get_links('http://10.12.179.218/.hidden/')
+
+
+# for link in links:
+# 	all_links.append(get_links(link))
+
+# 	print(all_links)
+
+
+# print(all_links)
+# all_links.sort()
+# print(all_links)
+# print(len(all_links))
+
+# for i in range(len(all_links)):
+# 	for j in range(len(all_links[i])):
+# 		r = requests.get('http://10.12.179.218/.hidden/' + all_links[i][j] + 'README')
+# 		if (r.status_code == 200):
+# 			print(r.text)
+# 		print('http://10.12.179.218/.hidden/' + all_links[i][j] + 'README')
+# r = requests.get('http://10.12.179.218/.hidden/README')
+# if (r.status_code == 200):
+# 	print(r.text)
+
+# print(all_links[0])
+
+# print(all_links[2])
