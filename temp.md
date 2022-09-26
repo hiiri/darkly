@@ -44,6 +44,8 @@ Flag: d19b4823e0d5600ceed56d5e896ef328d7a2b9e7ac7e80f4fcdb9b10bcb3e7ff
 robots.txt 2
 /whatever subdirectory
 
+http://{ip}/.hidden/whtccjokayshttvxycsvykxcfm/igeemtxnvexvxezqwntmzjltkt/lmpanswobhwcozdqixbowvbrhw/README
+
 Flag: 99dde1d35d1fdd283924d84e6d9f1d820
 ---
 
