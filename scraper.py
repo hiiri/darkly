@@ -1,6 +1,8 @@
 import requests
 import re
 import random
+import time
+from requests.adapters import HTTPAdapter, Retry
 
 
 intimidating = '''⠀⠀⠀⠀⠀⣠⣴⣶⣿⣿⠿⣷⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣶⣷⠿⣿⣿⣶⣦⣀⠀⠀⠀⠀⠀
@@ -38,13 +40,17 @@ def animation():
 	print((intimidating))
 	for i in range(3): print(''.join(random.choices('01', k=64)))
 
-
+s = requests.Session()
+retry = Retry(connect=3, backoff_factor=0.5)
+adapter = HTTPAdapter(max_retries=retry)
+s.mount('http://', adapter)
 
 def get_links(url):
 	r = requests.get(url)
 	links = re.findall(r'(?<=a href=").*?(?=")', str(r.text))
 	if links:
 		links[0] = url
+
 
 	for link in links:
 		readmelink = url + link
@@ -53,7 +59,12 @@ def get_links(url):
 		if readmelink.count('.hidden') == 2:
 			readmelink = readmelink[29:]
 		if (readmelink not in used and readmelink.startswith('http')):
-			r = requests.get(readmelink)
+			try:
+				r = s.get(readmelink)
+			except:
+				print("Connection refused by the server, retrying in 2 seconds")
+				time.sleep(2)
+				r = s.get(readmelink)
 		else:
 			continue
 		used.update({readmelink: True})
